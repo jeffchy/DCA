@@ -315,9 +315,9 @@ class MulRelRanker(LocalCtxAttRanker):
 
                     cumulative_entity_ids = Variable(self.unique(cumulative_entity_ids.cpu().data.numpy()).cuda())
 
-                    if (entity_ids[indx][gold.data[indx][0]]).data[0] in self.ent_inlinks:
+                    if (new_entities[0] in self.ent_inlinks):
 
-                        external_inlinks = np.asarray(self.ent_inlinks[(entity_ids[indx][gold.data[indx][0]]).data[0]][:self.tok_top_n4inlink])
+                        external_inlinks = np.asarray(self.ent_inlinks[new_entities[0]][:self.tok_top_n4inlink])
 
                         cumulative_knowledge_ids = Variable(self.unique(
                             np.concatenate((cumulative_knowledge_ids.cpu().data.numpy(), external_inlinks), axis=0)).cuda())
@@ -339,14 +339,14 @@ class MulRelRanker(LocalCtxAttRanker):
                     cumulative_entity_ids = torch.cat([cumulative_entity_ids, new_entities], dim=0)
                     cumulative_entity_ids = Variable(self.unique(cumulative_entity_ids.cpu().data.numpy()).cuda())
 
-                    if (entity_ids[indx][action.data[0]]).data[0] in self.ent_inlinks:
+                    if (new_entities[0]) in self.ent_inlinks:
                         # external_inlinks = Variable(torch.LongTensor(self.ent_inlinks[(entity_ids[indx][action.data[0]]).data[0]][:self.tok_top_n4inlink]).cuda())
                         #
                         # cumulative_knowledge_ids = torch.cat([cumulative_knowledge_ids, external_inlinks], dim=0)
                         #
                         # cumulative_knowledge_ids = Variable(self.unique(cumulative_knowledge_ids.data).cuda)
 
-                        external_inlinks = np.asarray(self.ent_inlinks[(entity_ids[indx][action.data[0]]).data[0]][:self.tok_top_n4inlink])
+                        external_inlinks = np.asarray(self.ent_inlinks[new_entities[0]][:self.tok_top_n4inlink])
 
                         cumulative_knowledge_ids = Variable(self.unique(
                             np.concatenate((cumulative_knowledge_ids.cpu().data.numpy(), external_inlinks), axis=0)).cuda())
