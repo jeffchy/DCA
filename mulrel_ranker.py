@@ -310,7 +310,9 @@ class MulRelRanker(LocalCtxAttRanker):
                     # print("gold[indx]: ", gold[indx])
                     # print("gold.data[indx][0]: ", gold.data[indx][0])
 
-                    cumulative_entity_ids = torch.cat([cumulative_entity_ids, entity_ids[indx][gold.data[indx][0]]], dim=0)
+                    new_entities = entity_ids[indx][[gold.data[indx][0]]].unsqueeze(0)
+                    cumulative_entity_ids = torch.cat([cumulative_entity_ids, new_entities], dim=0)
+
                     cumulative_entity_ids = Variable(self.unique(cumulative_entity_ids.cpu().data.numpy()).cuda())
 
                     if (entity_ids[indx][gold.data[indx][0]]).data[0] in self.ent_inlinks:
@@ -333,7 +335,8 @@ class MulRelRanker(LocalCtxAttRanker):
                     m = Categorical(action_prob)
                     action = m.sample()
 
-                    cumulative_entity_ids = torch.cat([cumulative_entity_ids, entity_ids[indx][action.data[0]]], dim=0)
+                    new_entities = entity_ids[indx][action.data[0]].unsqueeze(0)
+                    cumulative_entity_ids = torch.cat([cumulative_entity_ids, new_entities], dim=0)
                     cumulative_entity_ids = Variable(self.unique(cumulative_entity_ids.cpu().data.numpy()).cuda())
 
                     if (entity_ids[indx][action.data[0]]).data[0] in self.ent_inlinks:
